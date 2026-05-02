@@ -1,0 +1,191 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PolicyType {
+  PAYMENT
+  APPROVAL
+  ALERT
+  PAYROLL
+}
+
+enum InvoiceStatus {
+  PENDING
+  PAID
+  OVERDUE
+  FLAGGED
+}
+
+enum ExpenseStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PayFrequency {
+  WEEKLY
+  BIWEEKLY
+  MONTHLY
+}
+
+enum EmployeeStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum AgentLogStatus {
+  SUCCESS
+  FAILED
+  PENDING
+}
+
+enum TransactionType {
+  CREDIT
+  DEBIT
+}
+
+model User {
+  id               String             @id @default(uuid())
+  email            String             @unique
+  password         String
+  name             String
+  companyName      String
+  role             String             @default("owner")
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  policies         Policy[]
+  invoices         Invoice[]
+  expenses         Expense[]
+  employees        Employee[]
+  vendors          Vendor[]
+  agentLogs        AgentLog[]
+  bankTransactions BankTransaction[]
+  auditLogs        AuditLog[]
+  conversations    Conversation[]
+}
+
+model Policy {
+  id        String     @id @default(uuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  type      PolicyType
+  rules     Json
+  isActive  Boolean    @default(true)
+  createdAt DateTime   @default(now())
+}
+
+model Invoice {
+  id          String        @id @default(uuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vendorName  String
+  amount      Float
+  dueDate     DateTime
+  status      InvoiceStatus @default(PENDING)
+  description String?
+  paidAt      DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Expense {
+  id          String        @id @default(uuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category    String
+  amount      Float
+  description String
+  receipt     String?
+  status      ExpenseStatus @default(PENDING)
+  submittedBy String
+  createdAt   DateTime      @default(now())
+}
+
+model Employee {
+  id           String         @id @default(uuid())
+  userId       String
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name         String
+  email        String
+  salary       Float
+  payFrequency PayFrequency   @default(MONTHLY)
+  bankAccount  String?
+  status       EmployeeStatus @default(ACTIVE)
+  createdAt    DateTime       @default(now())
+}
+
+model Vendor {
+  id           String    @id @default(uuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name         String
+  email        String?
+  phone        String?
+  paymentTerms String?
+  totalPaid    Float     @default(0)
+  lastPaidAt   DateTime?
+  createdAt    DateTime  @default(now())
+}
+
+model AgentLog {
+  id        String         @id @default(uuid())
+  userId    String
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action    String
+  details   String
+  status    AgentLogStatus @default(SUCCESS)
+  createdAt DateTime       @default(now())
+}
+
+model BankTransaction {
+  id          String          @id @default(uuid())
+  userId      String
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount      Float
+  type        TransactionType
+  description String
+  date        DateTime        @default(now())
+  category    String?
+  createdAt   DateTime        @default(now())
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action     String
+  resource   String
+  resourceId String
+  oldData    Json?
+  newData    Json?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+}
+
+model Conversation {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String    @default("New Conversation")
+  messages  Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           String
+  content        String
+  toolCallId     String?
+  toolName       String?
+  createdAt      DateTime     @default(now())
+}
