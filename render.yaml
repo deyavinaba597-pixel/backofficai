@@ -1,12 +1,12 @@
 services:
-  # ─── Backend (Node.js) ───────────────────────────────────────────────────────
+  # ─── Backend (Node.js native — no Docker) ───────────────────────────────────
   - type: web
     name: backofficai-backend
-    env: node
+    runtime: node
     region: oregon
     plan: free
     rootDir: backend
-    buildCommand: npm install && npm run build
+    buildCommand: npm install && npx prisma generate && npm run build
     startCommand: npx prisma migrate deploy && node dist/index.js
     healthCheckPath: /health
     envVars:
@@ -36,7 +36,7 @@ services:
   # ─── Frontend (Static Site — completely free, no spin-down) ─────────────────
   - type: web
     name: backofficai-frontend
-    env: static
+    runtime: static
     region: oregon
     plan: free
     rootDir: frontend
