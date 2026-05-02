@@ -6,7 +6,7 @@ services:
     region: oregon
     plan: free
     rootDir: backend
-    buildCommand: npm install && npx prisma generate && npm run build
+    buildCommand: npm install && npm run build
     startCommand: npx prisma migrate deploy && node dist/index.js
     healthCheckPath: /health
     envVars:
@@ -15,23 +15,23 @@ services:
       - key: PORT
         value: "3001"
       - key: DATABASE_URL
-        sync: false          # paste your Neon URL in Render dashboard
+        sync: false
       - key: JWT_SECRET
-        generateValue: true  # Render auto-generates a secure value
+        generateValue: true
       - key: JWT_EXPIRES_IN
         value: "7d"
       - key: AI_PROVIDER
         value: groq
       - key: GROQ_API_KEY
-        sync: false          # paste in Render dashboard
+        sync: false
       - key: GROQ_MODEL
         value: llama-3.3-70b-versatile
       - key: RESEND_API_KEY
-        sync: false          # paste in Render dashboard
+        sync: false
       - key: RESEND_FROM_EMAIL
         value: onboarding@resend.dev
       - key: FRONTEND_URL
-        sync: false          # paste your Vercel URL after deploying frontend
+        sync: false
 
   # ─── Frontend (Static Site — completely free, no spin-down) ─────────────────
   - type: web
@@ -44,7 +44,7 @@ services:
     staticPublishPath: dist
     envVars:
       - key: VITE_API_URL
-        sync: false          # paste your backend Render URL + /api/v1
+        sync: false
     routes:
       - type: rewrite
         source: /api/*
