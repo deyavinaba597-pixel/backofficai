@@ -42,6 +42,7 @@ const allowedOrigins = [
   'http://localhost:3000',
   'https://backofficai.vercel.app',
   /https:\/\/backofficai.*\.vercel\.app$/,
+  /https:\/\/.*\.vercel\.app$/,
 ];
 
 app.use(cors({
