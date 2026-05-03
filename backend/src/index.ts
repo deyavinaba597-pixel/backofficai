@@ -75,19 +75,19 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-// General rate limiter: 100 requests per 15 minutes per IP
+// General rate limiter: 200 requests per 15 minutes per IP
 const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 200,
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: 'Too many requests, please try again later.' },
 });
 
-// Stricter rate limiter for auth routes: 10 requests per 15 minutes
+// Stricter rate limiter for auth routes: 20 requests per 15 minutes
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10,
+  max: 20,
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: 'Too many authentication attempts, please try again later.' },
