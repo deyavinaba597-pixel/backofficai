@@ -360,22 +360,33 @@ export function Landing() {
       </section>
 
       {/* Pricing */}
-      <section className="py-20 bg-gray-50">
+      <section id="pricing" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 rounded-full bg-green-50 border border-green-200 px-4 py-1.5 text-sm font-medium text-green-700 mb-4">
+              <CheckCircle className="h-3.5 w-3.5" />
+              No credit card required to start
+            </div>
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Simple, transparent pricing</h2>
-            <p className="text-gray-500 text-lg">Start free. Upgrade when you're ready.</p>
+            <p className="text-gray-500 text-lg">Start free. Upgrade when you're ready. Cancel anytime.</p>
           </div>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 max-w-5xl mx-auto">
+
+          {/* Pricing cards */}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 max-w-5xl mx-auto mb-16">
             {plans.map((plan) => (
               <div
                 key={plan.name}
-                className={`rounded-2xl p-8 ${
+                className={`relative rounded-2xl p-8 ${
                   plan.highlighted
                     ? 'bg-gradient-to-br from-indigo-600 to-purple-600 text-white shadow-2xl shadow-indigo-200 scale-105'
                     : 'bg-white border border-gray-100 shadow-sm'
                 }`}
               >
+                {plan.highlighted && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-yellow-400 px-4 py-1 text-xs font-bold text-yellow-900">
+                    MOST POPULAR
+                  </div>
+                )}
                 <h3 className={`text-lg font-bold mb-1 ${plan.highlighted ? 'text-white' : 'text-gray-900'}`}>
                   {plan.name}
                 </h3>
@@ -411,6 +422,101 @@ export function Landing() {
               </div>
             ))}
           </div>
+
+          {/* Comparison table */}
+          <div className="max-w-4xl mx-auto bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-16">
+            <div className="px-6 py-4 border-b bg-gray-50">
+              <h3 className="text-base font-semibold text-gray-900">Full feature comparison</h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left px-6 py-3 text-gray-500 font-medium">Feature</th>
+                    <th className="text-center px-6 py-3 text-gray-500 font-medium">Starter</th>
+                    <th className="text-center px-6 py-3 text-indigo-600 font-semibold">Growth</th>
+                    <th className="text-center px-6 py-3 text-gray-500 font-medium">Scale</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {[
+                    ['Invoices', '50/month', 'Unlimited', 'Unlimited'],
+                    ['Employees', '5', '50', 'Unlimited'],
+                    ['AI Agent', 'Basic', 'Full', 'Full + Custom'],
+                    ['Analytics', '—', '✅', '✅'],
+                    ['CSV Export', '—', '✅', '✅'],
+                    ['Audit Trail', '—', '✅', '✅'],
+                    ['Email Alerts', '—', '✅', '✅'],
+                    ['API Access', '—', '—', '✅'],
+                    ['Custom Integrations', '—', '—', '✅'],
+                    ['Support', 'Email', 'Priority', 'Dedicated'],
+                  ].map(([feature, starter, growth, scale]) => (
+                    <tr key={feature} className="hover:bg-gray-50">
+                      <td className="px-6 py-3 text-gray-700 font-medium">{feature}</td>
+                      <td className="px-6 py-3 text-center text-gray-500">{starter}</td>
+                      <td className="px-6 py-3 text-center text-indigo-600 font-medium bg-indigo-50/50">{growth}</td>
+                      <td className="px-6 py-3 text-center text-gray-500">{scale}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Money back + FAQ */}
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 max-w-4xl mx-auto">
+            {/* Guarantee */}
+            <div className="rounded-2xl bg-green-50 border border-green-100 p-6">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-100">
+                  <Shield className="h-5 w-5 text-green-600" />
+                </div>
+                <h3 className="text-base font-semibold text-gray-900">30-day money-back guarantee</h3>
+              </div>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Not happy in the first 30 days? We'll refund you, no questions asked. We're confident you'll love it.
+              </p>
+            </div>
+
+            {/* FAQ */}
+            <div className="rounded-2xl bg-white border border-gray-100 p-6 shadow-sm">
+              <h3 className="text-base font-semibold text-gray-900 mb-4">Common questions</h3>
+              <div className="space-y-3">
+                {[
+                  { q: 'Can I change plans later?', a: 'Yes, upgrade or downgrade anytime.' },
+                  { q: 'Is my data secure?', a: 'Yes — encrypted, isolated per company.' },
+                  { q: 'Do I need a credit card to start?', a: 'No. Free plan requires no card.' },
+                ].map(({ q, a }) => (
+                  <div key={q}>
+                    <p className="text-sm font-medium text-gray-800">{q}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{a}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact / Waitlist */}
+      <section className="py-20 bg-white">
+        <div className="max-w-xl mx-auto px-6 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Want a personal demo?</h2>
+          <p className="text-gray-500 mb-8">We'll walk you through the product and set up your account for free.</p>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <input
+              type="email"
+              placeholder="your@email.com"
+              className="flex-1 rounded-xl border border-gray-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            <button
+              onClick={() => navigate('/login')}
+              className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors whitespace-nowrap"
+            >
+              Book a demo
+            </button>
+          </div>
+          <p className="text-xs text-gray-400 mt-3">No spam. We'll reply within 24 hours.</p>
         </div>
       </section>
 
