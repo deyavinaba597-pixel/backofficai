@@ -1,5 +1,5 @@
 services:
-  # ─── Backend (Node.js native — no Docker) ───────────────────────────────────
+  # ─── Backend (Node.js native) ────────────────────────────────────────────────
   - type: web
     name: backofficai-backend
     runtime: node
@@ -33,7 +33,7 @@ services:
       - key: FRONTEND_URL
         sync: false
 
-  # ─── Frontend (Static Site — completely free, no spin-down) ─────────────────
+  # ─── Frontend (Static Site — no env vars needed) ─────────────────────────────
   - type: web
     name: backofficai-frontend
     runtime: static
@@ -42,13 +42,7 @@ services:
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
-    envVars:
-      - key: VITE_API_URL
-        sync: false
     routes:
-      - type: rewrite
-        source: /api/*
-        destination: https://backofficai-backend.onrender.com/api/*
       - type: rewrite
         source: /*
         destination: /index.html
