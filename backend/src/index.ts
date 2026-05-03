@@ -35,9 +35,25 @@ const app = express();
 // Security headers
 app.use(helmet());
 
-// CORS
+// CORS — allow frontend URL + common Vercel preview URLs
+const allowedOrigins = [
+  process.env.FRONTEND_URL || 'http://localhost:5173',
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://backofficai.vercel.app',
+  /https:\/\/backofficai.*\.vercel\.app$/,
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, Postman)
+    if (!origin) return callback(null, true);
+    const allowed = allowedOrigins.some(o =>
+      typeof o === 'string' ? o === origin : o.test(origin)
+    );
+    if (allowed) return callback(null, true);
+    callback(new Error(`CORS: origin ${origin} not allowed`));
+  },
   credentials: true,
 }));
 
