@@ -1,5 +1,8 @@
 {
   "name": "backofficai",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build"
+  }
 }
