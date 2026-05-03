@@ -3,7 +3,7 @@ import axios from 'axios';
 const BASE_URL = import.meta.env.VITE_API_URL || 
   (window.location.hostname === 'localhost' 
     ? 'http://localhost:3001/api/v1' 
-    : 'https://backofficai-yqb6.onrender.com/api/v1');
+    : 'https://backofficai-backend.onrender.com/api/v1');
 
 export const api = axios.create({
   baseURL: BASE_URL,
