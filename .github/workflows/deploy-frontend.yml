@@ -31,6 +31,7 @@ jobs:
         working-directory: frontend
         env:
           VITE_API_URL: https://backofficai-2.onrender.com/api/v1
+          VITE_BASE_PATH: /backofficai/
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
