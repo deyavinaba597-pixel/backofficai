@@ -48,12 +48,13 @@ router.post(
         },
       });
 
-      // Schedule background jobs for new user
-      try {
-        await scheduleJobsForUser(user.id);
-      } catch {
-        // Non-critical - don't fail registration if scheduler fails
-      }
+      // Schedule background jobs for new user (non-blocking, with timeout)
+      Promise.race([
+        scheduleJobsForUser(user.id),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000))
+      ]).catch(() => {
+        // Non-critical — scheduler may not be available
+      });
 
       // Send welcome email
       emailService.sendWelcomeEmail(user.email, user.name, user.companyName).catch(() => {});
