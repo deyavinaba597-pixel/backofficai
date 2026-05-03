@@ -35,13 +35,16 @@ const app = express();
 // Security headers
 app.use(helmet());
 
-// CORS — allow frontend URL + common Vercel preview URLs
+// CORS — allow frontend URL + Netlify + Vercel URLs
 const allowedOrigins = [
   process.env.FRONTEND_URL || 'http://localhost:5173',
   'http://localhost:5173',
   'http://localhost:3000',
+  'https://backofficai.netlify.app',
   'https://backofficai.vercel.app',
+  /https:\/\/backofficai.*\.netlify\.app$/,
   /https:\/\/backofficai.*\.vercel\.app$/,
+  /https:\/\/.*\.netlify\.app$/,
   /https:\/\/.*\.vercel\.app$/,
 ];
 
